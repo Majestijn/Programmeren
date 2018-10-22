@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9488f1260e3e234298893a7f248f83f, type: 3}
+  m_Name: WarriorCommon
+  m_EditorClassIdentifier: 
+  m_Health: 10
+  m_AttackDamage: 100
+  m_Movespeed: 0
+  m_MoveAmount: 6
+  m_Prefab: {fileID: 1929194021505528, guid: 28a55f292e4306a4e808721bc9938f9b, type: 2}
+  m_Allegiance: 0
+  m_UnitName: Common Warrior
+  m_UnitImage: {fileID: 21300000, guid: a9778ab2fe9427945816a10751bd25f1, type: 3}
