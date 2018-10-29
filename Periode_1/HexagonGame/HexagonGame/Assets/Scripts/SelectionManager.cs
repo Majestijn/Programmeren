@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 [DefaultExecutionOrder(10)]
 public class SelectionManager : MonoBehaviour {
@@ -14,9 +15,11 @@ public class SelectionManager : MonoBehaviour {
 	#region variables
 	public static SelectionManager instance;
 
-	Unit m_CurrentlySelected;
+	public GameObject m_SelectionOutline;
 
-	List<Hex> m_AllMovementPossibilities;
+	private Unit m_CurrentlySelected;
+
+	private List<Hex> m_AllMovementPossibilities;
 
 	public bool m_CanSelect = true;
 	#endregion
@@ -34,7 +37,7 @@ public class SelectionManager : MonoBehaviour {
 
 	private void SelectionInput()
 	{
-		if (Input.GetMouseButtonDown(0))
+		if (Input.GetMouseButtonDown(0) && !HelperClass.IsPointerOverUIElement())
 		{
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit;
@@ -48,10 +51,7 @@ public class SelectionManager : MonoBehaviour {
 				{
 					if (unit != null && m_CanSelect && !unit.CheckIfDead())
 					{
-						DisplayMovementPossibilities(hex, hex.m_CurrentUnit.m_MoveAmount);
-						m_CurrentlySelected = unit;
-						OnUnitSelected?.Invoke(unit);
-						unit.m_AllMovementPossibilities = m_AllMovementPossibilities;
+						SelectUnit(hex, unit);
 					}
 					else
 					{
@@ -81,7 +81,7 @@ public class SelectionManager : MonoBehaviour {
 				{
 					Hex hex = hit.transform.GetComponent<Hex>();
 
-					if (hex != null && m_CurrentlySelected != null && m_CurrentlySelected.m_MoveAmount > 0 && m_CurrentlySelected.m_CurrentHex != hex)
+					if (hex != null && m_CurrentlySelected != null && m_CurrentlySelected.m_MoveAmount > 0 && m_CurrentlySelected.m_CurrentHex != hex && m_AllMovementPossibilities.Contains(hex) && hex.m_IsAvailable)
 					{
 						if (hex.m_CurrentUnit != null)
 						{
@@ -118,5 +118,14 @@ public class SelectionManager : MonoBehaviour {
 		{
 			GridManager.instance.ChangeHexMaterial(m_AllMovementPossibilities, MaterialManager.instance.GetMaterial(MaterialName.BaseMaterial));
 		}
+	}
+
+	public void SelectUnit(Hex hex, Unit unit)
+	{
+		m_CanSelect = true;
+		DisplayMovementPossibilities(hex, hex.m_CurrentUnit.m_MoveAmount);
+		m_CurrentlySelected = unit;
+		OnUnitSelected?.Invoke(unit);
+		unit.m_AllMovementPossibilities = m_AllMovementPossibilities;
 	}
 }

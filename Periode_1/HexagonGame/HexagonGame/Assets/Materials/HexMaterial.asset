@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Name: HexMaterial
   m_EditorClassIdentifier: 
   m_MaterialName: 0
-  m_Material: {fileID: 2100000, guid: 009af20e734eb894795e4413b9d33b2d, type: 2}
+  m_Material: {fileID: 2100000, guid: a16b7b85a356b7d469067849a165dcff, type: 2}

@@ -12,17 +12,6 @@ public class Health : MonoBehaviour {
 
 	public bool m_IsDead = false;
 
-	void Start () {
-		
-	}
-	
-	void Update () {
-		
-	}
-	private void OnDestroy()
-	{
-		Debug.Log("IK BEN DOOD");
-	}
 	public void TakeDamage(int amount)
 	{
 		m_CurrentHealth -= amount;

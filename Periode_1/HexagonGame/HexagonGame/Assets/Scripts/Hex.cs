@@ -17,15 +17,17 @@ public class Hex : MonoBehaviour {
 	[HideInInspector]
 	public float width, height;
 
+	[HideInInspector]
 	public Vector2Int m_GridPosition;
 
+	[HideInInspector]
 	public MeshRenderer m_MeshRenderer;
-	public LineRenderer m_LineRenderer;
 
+	[HideInInspector]
 	public bool m_IsAvailable = true;
-
+	[HideInInspector]
 	public Hex m_Parent;
-
+	[HideInInspector]
 	public Unit m_CurrentUnit;
 
 	#region Getters
@@ -49,19 +51,27 @@ public class Hex : MonoBehaviour {
 
 	private void Awake()
 	{
-		m_TextObject = transform.GetChild(0).gameObject;
-		m_TextMesh = m_TextObject.GetComponent<TextMeshPro>();
+		//m_TextObject = transform.GetChild(0).gameObject;
+		//m_TextMesh = m_TextObject.GetComponent<TextMeshPro>();
 
 		m_MeshRenderer = GetComponent<MeshRenderer>();
 
-		m_Size = 5f;
+		MeshFilter mesh = GetComponent<MeshFilter>();
 
-		width = Mathf.Sqrt(3f) * m_Size;
-		height = (2 * m_Size);
+		//m_Size = 5f;
+
+		//width = Mathf.Sqrt(3f) * m_Size;
+		//height = (2 * m_Size);
+
+		//width = Mathf.Sqrt(3f) * mesh.mesh.bounds.size.x;
+		//height = (2 * mesh.mesh.bounds.size.z);
+
+		width = mesh.mesh.bounds.size.z;
+		height = mesh.mesh.bounds.size.x;
 	}
 
 	void Start () {
-		Generate3DMesh();
+		//Generate3DMesh();
 		//Generate2DMesh();
 	}
 
@@ -84,16 +94,12 @@ public class Hex : MonoBehaviour {
 
 	private void Generate3DMesh()
 	{
-		m_LineRenderer = GetComponent<LineRenderer>();
-
 		float randomHeight = Random.Range(0f, 0f);
 
 		Mesh mesh = new Mesh();
 		Vector3[] vertices = new Vector3[14];
 		vertices[0] = new Vector3(0, randomHeight, 0);
 		vertices[7] = Vector3.zero;
-
-		m_LineRenderer.positionCount = 6;
 
 		for (int i = 0; i < 6; i++)
 		{
@@ -102,11 +108,9 @@ public class Hex : MonoBehaviour {
 
 			vertices[i + 1] = new Vector3(m_Size * Mathf.Cos(angle_rad), randomHeight, m_Size * Mathf.Sin(angle_rad));
 			vertices[i + 8] = new Vector3(m_Size * Mathf.Cos(angle_rad), 0f, -m_Size * Mathf.Sin(angle_rad));
-
-			m_LineRenderer.SetPosition(i, new Vector3(vertices[i + 1].x, vertices[i + 1].y + .2f, vertices[i + 1].z));
 		}
 
-		m_TextObject.transform.position = new Vector3(m_TextObject.transform.position.x, vertices[0].y + 2f, m_TextObject.transform.position.z);
+		//m_TextObject.transform.position = new Vector3(m_TextObject.transform.position.x, vertices[0].y + 2f, m_TextObject.transform.position.z);
 
 		mesh.vertices = vertices;
 
@@ -164,13 +168,9 @@ public class Hex : MonoBehaviour {
 
 	private void Generate2DMesh()
 	{
-		m_LineRenderer = GetComponent<LineRenderer>();
-
 		Mesh mesh = new Mesh();
 		Vector3[] vertices = new Vector3[7];
 		vertices[0] = Vector3.zero;
-
-		m_LineRenderer.positionCount = 6;
 
 		for (int i = 0; i < 6; i++)
 		{
@@ -178,8 +178,6 @@ public class Hex : MonoBehaviour {
 			float angle_rad = Mathf.Deg2Rad * angle_deg;
 
 			vertices[i + 1] = new Vector3(m_Size * Mathf.Cos(angle_rad), 0f, m_Size * Mathf.Sin(angle_rad));
-
-			m_LineRenderer.SetPosition(i, new Vector3(vertices[i + 1].x, vertices[i + 1].y + .5f, vertices[i + 1].z));
 		}
 
 		mesh.vertices = vertices;
@@ -211,11 +209,9 @@ public class Hex : MonoBehaviour {
 
 	private void OnMouseEnter()
 	{
-		m_LineRenderer.material.color = Color.black;
-	}
-
-	private void OnMouseExit()
-	{
-		m_LineRenderer.material.color = Color.white;
+		if (!HelperClass.IsPointerOverUIElement())
+		{
+			SelectionManager.instance.m_SelectionOutline.transform.position = transform.position;
+		}
 	}
 }

@@ -105,8 +105,7 @@ public class Unit : MonoBehaviour, IMovable {
 
 		GridManager.instance.ChangeHexMaterial(m_CurrentHex, MaterialManager.instance.GetMaterial(MaterialName.BaseMaterial));
 
-		SelectionManager.instance.m_CanSelect = true;
-		UIManager.instance.UpdateUI(this);
+		SelectionManager.instance.SelectUnit(m_CurrentHex, this);
 
 		yield return null;
 	}
@@ -122,10 +121,10 @@ public class Unit : MonoBehaviour, IMovable {
 			{
 				Debug.Log("Already next to target");
 
+				m_TargetHealth = hex.m_CurrentUnit.healthScript;
 				transform.LookAt(hex.transform);
-				m_Animator.SetTrigger("Attack");
+				Attack();
 
-				SelectionManager.instance.m_CanSelect = true;
 				yield break;
 			}
 		}
@@ -187,8 +186,6 @@ public class Unit : MonoBehaviour, IMovable {
 
 		GridManager.instance.ChangeHexMaterial(m_CurrentHex, MaterialManager.instance.GetMaterial(MaterialName.BaseMaterial));
 
-		SelectionManager.instance.m_CanSelect = true;
-
 		m_TargetHealth = targetHex.m_CurrentUnit.m_Health;
 		Attack();
 
@@ -204,6 +201,7 @@ public class Unit : MonoBehaviour, IMovable {
 	{
 		m_MoveAmount = 0;
 		m_Animator.SetTrigger("Attack");
+		SelectionManager.instance.SelectUnit(m_CurrentHex, this);
 	}
 
 	public void DealDamage()
