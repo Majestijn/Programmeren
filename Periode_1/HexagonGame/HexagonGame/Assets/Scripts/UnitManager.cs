@@ -36,6 +36,13 @@ public class UnitManager : MonoBehaviour {
 			GridManager.instance.GetHexFromPosition(poss).m_CurrentUnit = goo.GetComponent<Unit>();
 			m_UnitList.Add(goo.GetComponent<Unit>());
 		}
+
+		Vector2Int pos = new Vector2Int(10, 10);
+		GameObject go = Instantiate(m_TestUnit, GridManager.instance.GetHexFromPosition(pos).transform.position, Quaternion.identity);
+		go.GetComponent<Unit>().m_CurrentHex = GridManager.instance.GetHexFromPosition(pos);
+		go.GetComponent<Unit>().m_CurrentHex.m_IsAvailable = false;
+		GridManager.instance.GetHexFromPosition(pos).m_CurrentUnit = go.GetComponent<Unit>();
+		m_UnitList.Add(go.GetComponent<Unit>());
 	}
 
 	private void OnDestroy()

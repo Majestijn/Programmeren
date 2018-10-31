@@ -16,6 +16,8 @@ public class GridManager : MonoBehaviour {
 
 	public Dictionary<Vector2Int, Hex> m_HexDict;
 
+	public Material m_Material;
+
 	private List<Vector2Int> m_GridList;
 
 	public static readonly Vector2Int[][] m_AxialDirections = new Vector2Int[][]
@@ -52,6 +54,13 @@ public class GridManager : MonoBehaviour {
 
 		float absoluteGridSize = (m_GridSize * 2) * (m_GridSize * 2);
 		int referencePoints = (int)absoluteGridSize / (int)Mathf.Pow(m_GridSize, 2f) * 2;
+
+		Texture2D gradient = GenerateGradientTexture(m_GridSize, m_GridSize, 10);
+		Texture2D perlinTexture = GeneratePerlinNoiseTexture(m_GridSize, m_GridSize, 10);
+
+		foreach (Color color )
+
+		m_Material.mainTexture = gradient.GetPixels() + perlinTexture.GetPixels();
 
 		#region Flat face hexagons
 		//for (int x = 0; x < m_GridSize; x++)
@@ -112,23 +121,17 @@ public class GridManager : MonoBehaviour {
 		{
 			for (int y = 0; y > -m_GridSize; y--)
 			{
-				int randomTile = 0;
-				
-				Texture2D perlinTexture = GeneratePerlinNoiseTexture(m_GridSize, m_GridSize, 100);
+				int randomTile = 0;			
 
 				float grayscale = perlinTexture.GetPixel(x, y).grayscale * 255;
 
-				if (grayscale < 50)
+				if (grayscale < 150)
 				{
-					randomTile = 0;
-				}
-				else if (grayscale > 50 && grayscale < 100)
-				{
-					randomTile = 1;
+					randomTile = 2;
 				}
 				else
 				{
-					randomTile = 2;
+					randomTile = 1;
 				}
 
 				//Instantiate hex
@@ -141,6 +144,19 @@ public class GridManager : MonoBehaviour {
 	{
 		GameObject go = Instantiate(m_HexagonPrefab[tileNumber].tiles[Random.Range(0, m_HexagonPrefab[tileNumber].tiles.Count - 1)], m_HexParent);
 		Hex hex = go.GetComponent<Hex>();
+
+		switch (tileNumber)
+		{
+			case 1:
+				hex.m_IsAvailable = false;
+				break;
+			case 2:
+				hex.m_IsAvailable = true;
+				break;
+			case 3:
+				hex.m_IsAvailable = false;
+				break;
+		}
 
 		//Add some hex values
 		m_HexDict.Add(new Vector2Int(x, Mathf.Abs(y)), hex);
@@ -157,7 +173,7 @@ public class GridManager : MonoBehaviour {
 
 		//hex.SetTextCord(new Vector2Int(x, Mathf.Abs(y)));
 
-		go.transform.position = new Vector3(x * hex.width + offset, 0, y * hex.height * 0.75f);
+		go.transform.position = new Vector3(x * hex.width + offset, (float)Random.Range(0f, 1f), y * hex.height * 0.75f);
 		go.transform.Rotate(0, -90f, 0);
 	}
 
@@ -187,7 +203,10 @@ public class GridManager : MonoBehaviour {
 			if (m_HexDict.ContainsKey(tempPos))
 			{
 				Hex hex = GetHexFromPosition(tempPos);
-				hexList.Add(hex);
+				if (hex.m_IsAvailable)
+				{
+					hexList.Add(hex);
+				}
 			}
 		}
 		return hexList;
@@ -288,12 +307,31 @@ public class GridManager : MonoBehaviour {
 		return texture;
 	}
 
+	private Texture2D GenerateGradientTexture(int width, int height, int scale)
+	{
+		Texture2D texture = new Texture2D(width, height, TextureFormat.RGBA32, true);
+		Vector2 center = new Vector2(width * 0.5f, height * 0.5f);
+
+		for (int x = 0; x < width; x++)
+		{
+			for (int y = 0; y < height; y++)
+			{
+				float distFromCenter = Vector2.Distance(center, new Vector2(x, y));
+				float pixel = (0.3f / (distFromCenter / width));
+				texture.SetPixel(x, y, new Color(pixel, pixel, pixel));
+			}
+		}
+
+		texture.Apply();
+		return texture;
+	}
+
 	private Color CalculatePerlinNoise(int x, int y, int width, int height, int scale)
 	{
 		float xcoord = (float)x / width * scale;
 		float ycoord = (float)y / height * scale;
 
-		float colorSample = Mathf.PerlinNoise(xcoord + Random.Range(0, 100), ycoord + Random.Range(0, 100));
+		float colorSample = Mathf.PerlinNoise(xcoord + Random.Range(0, 1000), ycoord + Random.Range(0, 1000));
 		return new Color(colorSample, colorSample, colorSample);
 	}
 }

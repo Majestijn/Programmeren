@@ -81,7 +81,7 @@ public class SelectionManager : MonoBehaviour {
 				{
 					Hex hex = hit.transform.GetComponent<Hex>();
 
-					if (hex != null && m_CurrentlySelected != null && m_CurrentlySelected.m_MoveAmount > 0 && m_CurrentlySelected.m_CurrentHex != hex && m_AllMovementPossibilities.Contains(hex) && hex.m_IsAvailable)
+					if (hex != null && m_CurrentlySelected != null && m_CurrentlySelected.m_MoveAmount > 0 && m_CurrentlySelected.m_CurrentHex != hex && m_AllMovementPossibilities.Contains(hex))
 					{
 						if (hex.m_CurrentUnit != null)
 						{
@@ -90,8 +90,11 @@ public class SelectionManager : MonoBehaviour {
 						}
 						else
 						{
-							m_CanSelect = false;
-							m_CurrentlySelected.MoveToHex(hex);
+							if (hex.m_IsAvailable && m_CanSelect)
+							{
+								m_CanSelect = false;
+								m_CurrentlySelected.MoveToHex(hex);
+							}
 						}
 					}
 				}
