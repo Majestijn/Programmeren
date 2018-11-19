@@ -55,12 +55,7 @@ public class GridManager : MonoBehaviour {
 		float absoluteGridSize = (m_GridSize * 2) * (m_GridSize * 2);
 		int referencePoints = (int)absoluteGridSize / (int)Mathf.Pow(m_GridSize, 2f) * 2;
 
-		Texture2D gradient = GenerateGradientTexture(m_GridSize, m_GridSize, 10);
 		Texture2D perlinTexture = GeneratePerlinNoiseTexture(m_GridSize, m_GridSize, 10);
-
-		foreach (Color color )
-
-		m_Material.mainTexture = gradient.GetPixels() + perlinTexture.GetPixels();
 
 		#region Flat face hexagons
 		//for (int x = 0; x < m_GridSize; x++)
