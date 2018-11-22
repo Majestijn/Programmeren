@@ -7,6 +7,8 @@ public class GridManager : MonoBehaviour {
 	#region variables
 	public static GridManager instance;
 
+	[SerializeField] private TextureCreator m_TextureCreator;
+
 	[SerializeField] private List<BiomesWrapper> m_HexagonPrefab;
 	[SerializeField] private Transform m_HexParent;
 
@@ -55,7 +57,8 @@ public class GridManager : MonoBehaviour {
 		float absoluteGridSize = (m_GridSize * 2) * (m_GridSize * 2);
 		int referencePoints = (int)absoluteGridSize / (int)Mathf.Pow(m_GridSize, 2f) * 2;
 
-		Texture2D perlinTexture = GeneratePerlinNoiseTexture(m_GridSize, m_GridSize, 10);
+		//Texture2D perlinTexture = GeneratePerlinNoiseTexture(m_GridSize, m_GridSize, 10);
+		Texture2D perlinTexture = m_TextureCreator.texture;
 
 		#region Flat face hexagons
 		//for (int x = 0; x < m_GridSize; x++)
@@ -114,19 +117,24 @@ public class GridManager : MonoBehaviour {
 
 		for (int x = 0; x < m_GridSize; x++)
 		{
-			for (int y = 0; y > -m_GridSize; y--)
+			for (int y = 0; y < m_GridSize; y++)
 			{
 				int randomTile = 0;			
 
-				float grayscale = perlinTexture.GetPixel(x, y).grayscale * 255;
+				float grayscale = perlinTexture.GetPixel(x, y).grayscale;
+				Color color = perlinTexture.GetPixel(x, y);
 
-				if (grayscale < 150)
+				if (grayscale < 0.45f)
+				{
+					randomTile = 1;
+				}
+				else if (grayscale > 0.45f && grayscale < 0.70f)
 				{
 					randomTile = 2;
 				}
 				else
 				{
-					randomTile = 1;
+					randomTile = 0;
 				}
 
 				//Instantiate hex
@@ -161,7 +169,7 @@ public class GridManager : MonoBehaviour {
 		//Calculate hex position
 		float offset = 0;
 
-		if (y % 2 == 0)
+		if ((y & 1) == 0)
 		{
 			offset = hex.width / 2;
 		}
