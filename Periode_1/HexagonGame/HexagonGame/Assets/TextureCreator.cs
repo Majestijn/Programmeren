@@ -36,6 +36,8 @@ public class TextureCreator : MonoBehaviour {
 			GetComponent<MeshRenderer>().material.mainTexture = texture;
 		}
 		FillTexture();
+
+		Destroy(gameObject);
 	}
 
 	private void Update () {

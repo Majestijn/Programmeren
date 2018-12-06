@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Unit : MonoBehaviour, IMovable {
+public class Unit : MonoBehaviour, IMovable, IAttackable {
 
 	[SerializeField] private UnitData m_Data;
 
@@ -19,6 +19,9 @@ public class Unit : MonoBehaviour, IMovable {
 	private List<Hex> m_PathList;
 
 	public Hex m_CurrentHex;
+
+	[SerializeField] private GameObject m_BoatForm;
+	[SerializeField] private GameObject[] m_BodyForm;
 
 	public Animator m_Animator;
 
@@ -45,19 +48,24 @@ public class Unit : MonoBehaviour, IMovable {
 		m_Animator = GetComponent<Animator>();
 	}
 
-	public void MoveToHex(Hex targetHex)
-	{
-		StartCoroutine(RMoveToHex(targetHex));
-	}
+	public void MoveToHex(Hex targetHex) => StartCoroutine(RMoveToHex(targetHex));
 
-	public void MoveToEnemy(Hex targetHex)
+	public void MoveToEnemy(Hex targetHex) => StartCoroutine(RAttackEnemy(targetHex));
+
+	public void SetTarget(Health enemyHealth) => m_TargetHealth = enemyHealth;
+
+	public void Attack()
 	{
-		StartCoroutine(RAttackEnemy(targetHex));
+		m_MoveAmount = 0;
+		m_Animator.SetTrigger("Attack");
+		SelectionManager.instance.SelectUnit(m_CurrentHex, this);
 	}
 
 	private IEnumerator RMoveToHex(Hex targetHex)
 	{
 		m_Animator.SetBool("IsWalking", true);
+		m_CurrentHex.m_CurrentUnit = null;
+		m_CurrentHex.m_IsAvailable = true;
 
 		GridManager.instance.ChangeHexMaterial(m_AllMovementPossibilities, MaterialManager.instance.GetMaterial(MaterialName.BaseMaterial));
 
@@ -66,17 +74,17 @@ public class Unit : MonoBehaviour, IMovable {
 
 		m_CurrentHexCount = 0;
 
-		while (Vector3.Distance(transform.position, m_PathList[m_PathList.Count - 1].transform.position) > 0.2f)
+		while (Vector3.Distance(transform.position, m_PathList[m_PathList.Count - 1].transform.position) > 0.3f)
 		{
 			if (Vector3.Distance(transform.position, m_PathList[m_CurrentHexCount].transform.position) > 0.2f)
 			{
 				Vector3 direction = m_PathList[m_CurrentHexCount].transform.position - transform.position;
 
 				Vector3 targetRot = transform.position - m_PathList[m_CurrentHexCount].transform.position;
-				Vector3 newDir = Vector3.RotateTowards(transform.forward, direction, 10 * Time.deltaTime, 0.0f);
+				Vector3 newDir = Vector3.RotateTowards(transform.forward, direction, 10f * Time.deltaTime, 0.0f);
 
 				transform.rotation = Quaternion.LookRotation(newDir);
-				transform.Translate(direction.normalized * Time.deltaTime * 15, Space.World);
+				transform.Translate(direction.normalized * Time.deltaTime * 10, Space.World);
 				yield return new WaitForEndOfFrame();
 			}
 			else
@@ -85,6 +93,7 @@ public class Unit : MonoBehaviour, IMovable {
 				{
 					GridManager.instance.ChangeHexMaterial(m_PathList[m_CurrentHexCount], MaterialManager.instance.GetMaterial(MaterialName.BaseMaterial));
 					m_CurrentHexCount++;
+					m_CurrentHex = m_PathList[m_CurrentHexCount];
 					yield return new WaitForEndOfFrame();
 				}
 				yield return new WaitForEndOfFrame();
@@ -95,8 +104,6 @@ public class Unit : MonoBehaviour, IMovable {
 
 		m_MoveAmount -= m_PathList.Count;
 
-		m_CurrentHex.m_IsAvailable = true;
-		m_CurrentHex.m_CurrentUnit = null;
 		m_CurrentHex = m_PathList[m_PathList.Count - 1];
 		m_CurrentHex.m_IsAvailable = false;
 		m_CurrentHex.m_CurrentUnit = this;
@@ -119,8 +126,6 @@ public class Unit : MonoBehaviour, IMovable {
 		{
 			if (hex == targetHex)
 			{
-				Debug.Log("Already next to target");
-
 				m_TargetHealth = hex.m_CurrentUnit.healthScript;
 				transform.LookAt(hex.transform);
 				Attack();
@@ -186,27 +191,20 @@ public class Unit : MonoBehaviour, IMovable {
 
 		GridManager.instance.ChangeHexMaterial(m_CurrentHex, MaterialManager.instance.GetMaterial(MaterialName.BaseMaterial));
 
-		m_TargetHealth = targetHex.m_CurrentUnit.m_Health;
+		SetTarget(targetHex.m_CurrentUnit.m_Health);
 		Attack();
 
 		yield return null;
 	}
 
-	private void Die()
-	{
-		UnitManager.instance.FireUnitDiesAction(this);
-	}
-
-	public void Attack()
-	{
-		m_MoveAmount = 0;
-		m_Animator.SetTrigger("Attack");
-		SelectionManager.instance.SelectUnit(m_CurrentHex, this);
-	}
-
 	public void DealDamage()
 	{
 		m_TargetHealth.TakeDamage(m_AttackDamage);
+	}
+
+	private void Die()
+	{
+		UnitManager.instance.FireUnitDiesAction(this);
 	}
 
 	public bool CheckIfDead()

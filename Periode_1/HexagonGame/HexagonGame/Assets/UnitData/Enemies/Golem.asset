@@ -13,6 +13,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Health: 10
   m_AttackDamage: 10
+  m_Movespeed: 0
   m_MoveAmount: 3
   m_Prefab: {fileID: 1879386600721496, guid: a67bae1a0c62815499bdfdcc17a5735b, type: 2}
   m_Allegiance: 1
+  m_UnitName: Golem
+  m_UnitImage: {fileID: 0}

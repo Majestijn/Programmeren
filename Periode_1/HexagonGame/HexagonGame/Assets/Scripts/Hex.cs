@@ -29,6 +29,8 @@ public class Hex : MonoBehaviour {
 	public Hex m_Parent;
 	[HideInInspector]
 	public Unit m_CurrentUnit;
+	[HideInInspector]
+	public TileType m_TileType;
 
 	#region Getters
 	public int gCost
@@ -87,9 +89,10 @@ public class Hex : MonoBehaviour {
 		m_TextMesh.text = cord.x + "  " + cord.y;
 	}
 
-	public void ChangeMaterial(Material material)
+	public void ResetValues()
 	{
-		m_MeshRenderer.material = material;
+		m_CurrentUnit = null;
+		m_IsAvailable = true;
 	}
 
 	private void Generate3DMesh()

@@ -891,6 +891,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4951685103884270}
   - component: {fileID: 95346446247848262}
+  - component: {fileID: 114663396225906170}
+  - component: {fileID: 114425138307320116}
   m_Layer: 0
   m_Name: Golem
   m_TagString: Untagged
@@ -1952,7 +1954,7 @@ Transform:
   m_GameObject: {fileID: 1879386600721496}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -15.81, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2.2, y: 2.2, z: 2.2}
   m_Children:
   - {fileID: 4617339911138138}
   - {fileID: 4256615894563548}
@@ -2003,6 +2005,34 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114425138307320116
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1879386600721496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 404bf1e4db6c5fa459a815389b4298fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsDead: 0
+--- !u!114 &114663396225906170
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1879386600721496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4c60e0647d8c24585a2dc215e3cf66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Data: {fileID: 11400000, guid: 0c222bf713bf61241b1635e5de2b4a5d, type: 2}
+  m_MoveAmount: 0
+  m_AllMovementPossibilities: []
+  m_CurrentHex: {fileID: 0}
+  m_Animator: {fileID: 0}
 --- !u!137 &137491250641357314
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

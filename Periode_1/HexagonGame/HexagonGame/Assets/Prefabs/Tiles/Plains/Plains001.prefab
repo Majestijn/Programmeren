@@ -117,3 +117,4 @@ MonoBehaviour:
   m_IsAvailable: 1
   m_Parent: {fileID: 0}
   m_CurrentUnit: {fileID: 0}
+  m_TileType: 0

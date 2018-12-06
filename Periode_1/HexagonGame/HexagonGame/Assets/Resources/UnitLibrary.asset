@@ -11,14 +11,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4aaed53052290e42934dde09d689f1e, type: 3}
   m_Name: UnitLibrary
   m_EditorClassIdentifier: 
-  unitTypes:
-  - {fileID: 11400000, guid: c3425ee3c6d925e40a83957e1a2b5af8, type: 2}
-  - {fileID: 11400000, guid: 1e27fe829b5dbd448ad76337f23bbf31, type: 2}
-  - {fileID: 11400000, guid: 0f563605bf4667f4a88b2c4c7fb95c4c, type: 2}
-  - {fileID: 11400000, guid: 00e7a96741590bc40af0cb9ff42f4888, type: 2}
-  - {fileID: 11400000, guid: 0c222bf713bf61241b1635e5de2b4a5d, type: 2}
-  - {fileID: 11400000, guid: 1b53fa658c7c6914a8f9fbfaa2847cac, type: 2}
-  - {fileID: 11400000, guid: 6093b4372148b154ea342a4ccb5785af, type: 2}
-  - {fileID: 11400000, guid: 4fa95e691725a2b449b4bd19a56719e6, type: 2}
-  - {fileID: 11400000, guid: 34da53e3442d7f44aa4260ea25b910f1, type: 2}
-  - {fileID: 11400000, guid: d75787cd0323ada4b9f7671a71a07381, type: 2}
+  TreantData: {fileID: 11400000, guid: 34da53e3442d7f44aa4260ea25b910f1, type: 2}
+  DragonData: {fileID: 11400000, guid: 0f563605bf4667f4a88b2c4c7fb95c4c, type: 2}
+  GiantBeeData: {fileID: 11400000, guid: 00e7a96741590bc40af0cb9ff42f4888, type: 2}
+  GolemData: {fileID: 11400000, guid: 0c222bf713bf61241b1635e5de2b4a5d, type: 2}
+  KingCobraData: {fileID: 11400000, guid: 1b53fa658c7c6914a8f9fbfaa2847cac, type: 2}
+  MagmaData: {fileID: 11400000, guid: 6093b4372148b154ea342a4ccb5785af, type: 2}
+  BatData: {fileID: 11400000, guid: c3425ee3c6d925e40a83957e1a2b5af8, type: 2}
+  SpiderData: {fileID: 11400000, guid: 4fa95e691725a2b449b4bd19a56719e6, type: 2}
+  ChestData: {fileID: 11400000, guid: 1e27fe829b5dbd448ad76337f23bbf31, type: 2}
+  WolfData: {fileID: 11400000, guid: d75787cd0323ada4b9f7671a71a07381, type: 2}
+  WarriorData: {fileID: 11400000, guid: 0516ad579dad5344182fc998519adb1f, type: 2}
+  ArcherData: {fileID: 11400000, guid: 0afb94d94b72ccb468311a2a914f1dcc, type: 2}
+  MageData: {fileID: 11400000, guid: 3cf51fc1b999ab746b8ae33c9fa44afb, type: 2}
+  SettlerData: {fileID: 11400000, guid: 5ea60e52e488efd4ab8fe6470cfe0d04, type: 2}

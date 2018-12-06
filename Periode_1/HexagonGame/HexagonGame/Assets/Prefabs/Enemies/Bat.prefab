@@ -35,6 +35,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4636787483503546}
   - component: {fileID: 95102376336726774}
+  - component: {fileID: 114116874015057322}
+  - component: {fileID: 114161831261012202}
   m_Layer: 0
   m_Name: Bat
   m_TagString: Untagged
@@ -479,7 +481,7 @@ Transform:
   m_GameObject: {fileID: 1105588004266822}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -8.27, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2.6, y: 2.6, z: 2.6}
   m_Children:
   - {fileID: 4996669983565572}
   - {fileID: 4368950589807478}
@@ -581,6 +583,34 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114116874015057322
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1105588004266822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4c60e0647d8c24585a2dc215e3cf66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Data: {fileID: 11400000, guid: c3425ee3c6d925e40a83957e1a2b5af8, type: 2}
+  m_MoveAmount: 0
+  m_AllMovementPossibilities: []
+  m_CurrentHex: {fileID: 0}
+  m_Animator: {fileID: 0}
+--- !u!114 &114161831261012202
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1105588004266822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 404bf1e4db6c5fa459a815389b4298fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsDead: 0
 --- !u!137 &137294677411172682
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

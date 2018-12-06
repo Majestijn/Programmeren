@@ -971,8 +971,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4774390998166712}
   - component: {fileID: 95462694323233754}
-  - component: {fileID: 114783567075999458}
-  - component: {fileID: 65671837747250238}
+  - component: {fileID: 114810296183461592}
+  - component: {fileID: 114908397573871144}
   m_Layer: 0
   m_Name: MageCommon
   m_TagString: Untagged
@@ -1745,7 +1745,7 @@ Transform:
   m_GameObject: {fileID: 1989728057871490}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.312499, y: 1.312499, z: 1.312499}
   m_Children:
   - {fileID: 4914445532608194}
   - {fileID: 4078872635088034}
@@ -1992,18 +1992,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1707868645103154}
   m_Mesh: {fileID: 4300000, guid: daa3f584d1c520b4faf3c6cd0a4f8488, type: 3}
---- !u!65 &65671837747250238
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1989728057871490}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.2088149, y: 3.308567, z: 1}
-  m_Center: {x: -0.011600763, y: 1.6531196, z: 0}
 --- !u!95 &95308807253946368
 Animator:
   serializedVersion: 3
@@ -2031,7 +2019,7 @@ Animator:
   m_GameObject: {fileID: 1989728057871490}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 803a9d702988c6e48a97a7f4f032ddbc, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bf307e4347e4f02429d416e1e0bbef9a, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2040,7 +2028,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &114783567075999458
+--- !u!114 &114810296183461592
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2048,19 +2036,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 1989728057871490}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1eb347b9e8b662546a9bff40c0daa1ea, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b4c60e0647d8c24585a2dc215e3cf66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Data: {fileID: 11400000, guid: 3cf51fc1b999ab746b8ae33c9fa44afb, type: 2}
-  m_GridManager: {fileID: 0}
-  m_Health: 0
-  m_AttackDamage: 0
-  m_MovementPosibilities: []
-  m_PathList: []
   m_MoveAmount: 0
+  m_AllMovementPossibilities: []
   m_CurrentHex: {fileID: 0}
-  m_IsSelected: 0
+  m_BoatForm: {fileID: 0}
+  m_BodyForm: []
   m_Animator: {fileID: 0}
+--- !u!114 &114908397573871144
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1989728057871490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 404bf1e4db6c5fa459a815389b4298fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsDead: 0
 --- !u!137 &137148418826852480
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

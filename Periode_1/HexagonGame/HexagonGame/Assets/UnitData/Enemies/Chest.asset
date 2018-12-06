@@ -13,6 +13,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Health: 10
   m_AttackDamage: 10
+  m_Movespeed: 0
   m_MoveAmount: 3
   m_Prefab: {fileID: 1314664464065424, guid: d4b58fba0478cf44ab2239083bf39c4a, type: 2}
   m_Allegiance: 1
+  m_UnitName: Chest
+  m_UnitImage: {fileID: 0}

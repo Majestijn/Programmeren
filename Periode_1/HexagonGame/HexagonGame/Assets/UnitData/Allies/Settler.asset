@@ -9,10 +9,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9488f1260e3e234298893a7f248f83f, type: 3}
-  m_Name: Spider
+  m_Name: Settler
   m_EditorClassIdentifier: 
   m_Health: 10
-  m_AttackDamage: 10
-  m_MoveAmount: 3
-  m_Prefab: {fileID: 1573276447962694, guid: 80deb00e7ae59cc45b9a075edcbe93be, type: 2}
-  m_Allegiance: 1
+  m_AttackDamage: 0
+  m_Movespeed: 0
+  m_MoveAmount: 4
+  m_Prefab: {fileID: 1823169890738246, guid: 3676777ec98d0e642a2ec81f8e64c511, type: 2}
+  m_Allegiance: 0
+  m_UnitName: Settler
+  m_UnitImage: {fileID: 21300000, guid: a9778ab2fe9427945816a10751bd25f1, type: 3}

@@ -8,14 +8,17 @@ public class UIManager : MonoBehaviour {
 
 	public static UIManager instance;
 
-	[SerializeField] private TextMeshProUGUI m_NameText, m_MoveText;
+	[SerializeField] private TextMeshProUGUI m_NameText, m_MoveText, m_CitynameText;
 	[SerializeField] private Image m_AvatarImage, m_HealthImage;
-	[SerializeField] private GameObject m_InfoObject;
+	[SerializeField] private GameObject m_InfoObject, m_CityInfoObject, m_MoreSpaceObject;
 
 	void Start () {
 		instance = this;
 		SelectionManager.instance.OnUnitSelected += UpdateUI;
 		SelectionManager.instance.OnUnitDeselected += HideInfoObject;
+
+		SelectionManager.instance.OnCitySelected += UpdateCityUI;
+		SelectionManager.instance.OnCityDeselected += HideCityInfoObject;
 	}
 
 	public void UpdateUI(Unit unit)
@@ -31,14 +34,36 @@ public class UIManager : MonoBehaviour {
 
 		m_HealthImage.fillAmount = ((float)unit.healthScript.GetHealth() / (float)unit.unitData.health);
 	}
+	
+	public void UpdateCityUI(City city)
+	{
+		if (!m_CityInfoObject.activeSelf)
+			m_CityInfoObject.SetActive(true);
+
+		m_CitynameText.text = city.GetCityName();
+	}
+
+	public void HideCityInfoObject()
+	{
+		m_CityInfoObject.SetActive(false);
+	}
 
 	private void HideInfoObject()
 	{
 		m_InfoObject.SetActive(false);
 	}
 
+	public void ToggleMoreSpaceObject()
+	{
+		m_MoreSpaceObject.SetActive(true);
+	}
+
 	private void OnDestroy()
 	{
 		SelectionManager.instance.OnUnitSelected -= UpdateUI;
+		SelectionManager.instance.OnUnitDeselected -= HideInfoObject;
+
+		SelectionManager.instance.OnCitySelected -= UpdateCityUI;
+		SelectionManager.instance.OnCityDeselected -= HideCityInfoObject;
 	}
 }

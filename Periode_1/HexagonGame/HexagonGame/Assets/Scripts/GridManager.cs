@@ -14,13 +14,7 @@ public class GridManager : MonoBehaviour {
 
 	[SerializeField] private int m_GridSize;
 
-	private List<LineRenderer> m_LineRendererList;
-
 	public Dictionary<Vector2Int, Hex> m_HexDict;
-
-	public Material m_Material;
-
-	private List<Vector2Int> m_GridList;
 
 	public static readonly Vector2Int[][] m_AxialDirections = new Vector2Int[][]
 	{
@@ -52,12 +46,6 @@ public class GridManager : MonoBehaviour {
 	}
 
 	void Start () {
-		m_LineRendererList = new List<LineRenderer>();
-
-		float absoluteGridSize = (m_GridSize * 2) * (m_GridSize * 2);
-		int referencePoints = (int)absoluteGridSize / (int)Mathf.Pow(m_GridSize, 2f) * 2;
-
-		//Texture2D perlinTexture = GeneratePerlinNoiseTexture(m_GridSize, m_GridSize, 10);
 		Texture2D perlinTexture = m_TextureCreator.texture;
 
 		#region Flat face hexagons
@@ -115,48 +103,78 @@ public class GridManager : MonoBehaviour {
 		//Debug.Log(m_HexDict.Count);
 		#endregion
 
+		//First pass to randomly generate terrain
 		for (int x = 0; x < m_GridSize; x++)
 		{
 			for (int y = 0; y < m_GridSize; y++)
 			{
-				int randomTile = 0;			
+				TileType randomTile;			
 
 				float grayscale = perlinTexture.GetPixel(x, y).grayscale;
-				Color color = perlinTexture.GetPixel(x, y);
 
-				if (grayscale < 0.45f)
+				if (grayscale < 0.40f)
 				{
-					randomTile = 1;
+					randomTile = TileType.Water;
 				}
-				else if (grayscale > 0.45f && grayscale < 0.70f)
+				else if (grayscale > 0.40f && grayscale < 0.70f)
 				{
-					randomTile = 2;
+					randomTile = TileType.Grass;
 				}
 				else
 				{
-					randomTile = 0;
+					randomTile = TileType.Mountain;
 				}
 
 				//Instantiate hex
 				SpawnHexes(x, y, randomTile);
 			}
 		}
+
+		//Second pass to make sure there are no singular water tiles
+		int counter = 0;
+
+		for (int x = 0; x < m_GridSize; x++)
+		{
+			for (int y = 0; y < m_GridSize; y++)
+			{
+				if (m_HexDict[new Vector2Int(x, y)].m_TileType == TileType.Water)
+				{
+					List<TileType> neighbourList = new List<TileType>();
+
+					foreach (Hex neighbour in GetAllNeighbours(m_HexDict[new Vector2Int(x, y)]))
+					{
+						neighbourList.Add(neighbour.m_TileType);
+
+						if (neighbour.m_TileType == TileType.Water) 
+							counter ++;
+					}
+					
+					//bool shouldDestroy = !neighbourList.Contains(TileType.Water);
+					bool shouldDestroy = counter <= 2 || !neighbourList.Contains(TileType.Water);
+
+					if (shouldDestroy)
+					{
+						ReplaceHex(new Vector2Int(x, y), TileType.Grass);
+					}
+				}
+			}
+		}
 	}
 
-	private void SpawnHexes(int x, int y, int tileNumber)
+	private void SpawnHexes(int x, int y, TileType tileNumber)
 	{
-		GameObject go = Instantiate(m_HexagonPrefab[tileNumber].tiles[Random.Range(0, m_HexagonPrefab[tileNumber].tiles.Count - 1)], m_HexParent);
+		GameObject go = Instantiate(m_HexagonPrefab[(int)tileNumber].tiles[Random.Range(0, m_HexagonPrefab[(int)tileNumber].tiles.Count - 1)], m_HexParent);
 		Hex hex = go.GetComponent<Hex>();
 
 		switch (tileNumber)
 		{
-			case 1:
-				hex.m_IsAvailable = false;
-				break;
-			case 2:
+			case TileType.Grass:
 				hex.m_IsAvailable = true;
 				break;
-			case 3:
+			case TileType.Water:
+				hex.m_IsAvailable = true;
+				break;
+			case TileType.Mountain:
 				hex.m_IsAvailable = false;
 				break;
 		}
@@ -166,6 +184,8 @@ public class GridManager : MonoBehaviour {
 
 		hex.m_GridPosition = new Vector2Int(x, Mathf.Abs(y));
 
+		hex.m_TileType = tileNumber;
+
 		//Calculate hex position
 		float offset = 0;
 
@@ -174,9 +194,7 @@ public class GridManager : MonoBehaviour {
 			offset = hex.width / 2;
 		}
 
-		//hex.SetTextCord(new Vector2Int(x, Mathf.Abs(y)));
-
-		go.transform.position = new Vector3(x * hex.width + offset, (float)Random.Range(0f, 1f), y * hex.height * 0.75f);
+		go.transform.position = new Vector3(x * hex.width + offset, (float)Random.Range(0f, 0.5f), y * hex.height * 0.75f);
 		go.transform.Rotate(0, -90f, 0);
 	}
 
@@ -198,7 +216,6 @@ public class GridManager : MonoBehaviour {
 		List<Hex> hexList = new List<Hex>();
 
 		int parity = currentHex.m_GridPosition.y % 2;
-		Debug.Log(parity);
 
 		for (int i = 0; i < 6; i++)
 		{
@@ -206,13 +223,107 @@ public class GridManager : MonoBehaviour {
 			if (m_HexDict.ContainsKey(tempPos))
 			{
 				Hex hex = GetHexFromPosition(tempPos);
+
 				if (hex.m_IsAvailable)
 				{
 					hexList.Add(hex);
 				}
+				else
+				{
+					if (hex.m_CurrentUnit != null)
+					{
+						hexList.Add(hex);
+					}
+				}
 			}
 		}
 		return hexList;
+	}
+
+	public List<Hex> GetAllNeighbours(Hex currentHex)
+	{
+		List<Hex> hexList = new List<Hex>();
+
+		int parity = currentHex.m_GridPosition.y % 2;
+
+		for (int i = 0; i < 6; i++)
+		{
+			Vector2Int tempPos = new Vector2Int(currentHex.m_GridPosition.x + m_AxialDirections[parity][i].x, currentHex.m_GridPosition.y + m_AxialDirections[parity][i].y);
+			if (m_HexDict.ContainsKey(tempPos))
+			{
+				Hex hex = GetHexFromPosition(tempPos);
+
+				hexList.Add(hex);
+			}
+		}
+		return hexList;
+	}
+
+	public Hex GetFirstAvailableSlotFromNeighbours(Vector2Int pos)
+	{
+		List<Hex> tempHexList = GetNeighbours(GetHexFromPosition(pos));
+
+		foreach (Hex hex in tempHexList)
+		{
+			if (hex.m_IsAvailable && hex.m_TileType != TileType.Water)
+			{
+				return hex;
+			}
+		}
+
+		return null;
+	}
+
+	public Hex FindRandomHex()
+	{
+		Hex hex = m_HexDict[new Vector2Int(Random.Range(0, m_GridSize), Random.Range(0, m_GridSize))];
+
+		while (!hex.m_IsAvailable && hex.m_TileType == TileType.Water)
+		{
+			hex = m_HexDict[new Vector2Int(Random.Range(0, m_GridSize), Random.Range(0, m_GridSize))];
+		}
+
+		return hex;
+	}
+
+	public void ReplaceHex(Vector2Int hexPos, TileType tileType)
+	{
+		Transform tempTransform = m_HexDict[hexPos].transform;
+		Destroy(m_HexDict[hexPos].gameObject);
+
+		GameObject go = Instantiate(m_HexagonPrefab[(int)tileType].tiles[Random.Range(0, m_HexagonPrefab[(int)tileType].tiles.Count - 1)], m_HexParent);
+		Hex hex = go.GetComponent<Hex>();
+
+		hex.m_IsAvailable = true;
+		m_HexDict[hexPos] = hex;
+		hex.m_GridPosition = hexPos;
+
+		hex.m_TileType = tileType;
+
+		go.transform.position = tempTransform.position;
+		go.transform.rotation = tempTransform.rotation;
+
+	}
+
+	public void BuildCity()
+	{
+		Vector2Int tempPos = SelectionManager.instance.m_CurrentlySelected.m_CurrentHex.m_GridPosition;
+		ReplaceHex(tempPos, TileType.City);
+		UnitManager.instance.DeleteUnit(SelectionManager.instance.m_CurrentlySelected);
+		SelectionManager.instance.DeSelectUnit();
+
+		CityNamer.instance.SetInputObject(true);
+		CityNamer.instance.ChangeCity(m_HexDict[tempPos].GetComponent<City>());
+	}
+
+	public void BuildCity(Vector2Int pos)
+	{
+		ReplaceHex(pos, TileType.City);
+		UnitManager.instance.DeleteUnit(SelectionManager.instance.m_CurrentlySelected);
+		SelectionManager.instance.DeSelectUnit();
+
+		CityNamer.instance.SetInputObject(true);
+		CityNamer.instance.ChangeCity(m_HexDict[pos].GetComponent<City>());
 	}
 
 	public void ChangeHexMaterial(Hex hex, Material material)
@@ -240,11 +351,20 @@ public class GridManager : MonoBehaviour {
 		}
 	}
 
+	public int GetDistance(Vector2Int nodeA, Vector2Int nodeB)
+	{
+		Vector3 nodeAPos = OddToCube(nodeA);
+		Vector3 nodeBPos = OddToCube(nodeB);
+		int returnvalue = ((int)Mathf.Abs(nodeAPos.x - nodeBPos.x) + (int)Mathf.Abs(nodeAPos.y - nodeBPos.y) + (int)Mathf.Abs(nodeAPos.z - nodeBPos.z)) / 2;
+		return returnvalue;
+	}
+
+	#region Coordinate conversion
 	public Vector3 AxialToCube(Hex hex)
 	{
 		int x = hex.m_GridPosition.x;
 		int z = hex.m_GridPosition.y;
-		int y = -x-z;
+		int y = -x - z;
 
 		return new Vector3(x, y, z);
 	}
@@ -262,16 +382,16 @@ public class GridManager : MonoBehaviour {
 	{
 		int x = hex.m_GridPosition.y - (hex.m_GridPosition.x + (hex.m_GridPosition.x & 1)) / 2;
 		int z = hex.m_GridPosition.x;
-		int y = -x-z;
+		int y = -x - z;
 
 		return new Vector3(x, y, z);
 	}
 
 	public Vector3 OddToCube(Vector2Int pos)
 	{
-		int x = pos.y - (pos.x + (pos.x&1)) / 2;
+		int x = pos.y - (pos.x + (pos.x & 1)) / 2;
 		int z = pos.x;
-		int y = -x-z;
+		int y = -x - z;
 
 		return new Vector3(x, y, z);
 	}
@@ -283,64 +403,20 @@ public class GridManager : MonoBehaviour {
 		int returnvalue = ((int)Mathf.Abs(nodeAPos.x - nodeBPos.x) + (int)Mathf.Abs(nodeAPos.y - nodeBPos.y) + (int)Mathf.Abs(nodeAPos.z - nodeBPos.z)) / 2;
 		return returnvalue;
 	}
-
-	public int GetDistance(Vector2Int nodeA, Vector2Int nodeB)
-	{
-		Vector3 nodeAPos = OddToCube(nodeA);
-		Vector3 nodeBPos = OddToCube(nodeB);
-		int returnvalue = ((int)Mathf.Abs(nodeAPos.x - nodeBPos.x) + (int)Mathf.Abs(nodeAPos.y - nodeBPos.y) + (int)Mathf.Abs(nodeAPos.z - nodeBPos.z)) / 2;
-		return returnvalue;
-	}
-
-	private Texture2D GeneratePerlinNoiseTexture(int width, int height, int scale)
-	{
-		Texture2D texture = new Texture2D(width, height);
-
-		for (int x = 0; x < width; x++)
-		{
-			for (int y = 0; y < height; y++)
-			{
-				Color color = CalculatePerlinNoise(x, y, width, height, scale);
-				texture.SetPixel(x, y, color);
-			}
-		}
-
-		texture.Apply();
-
-		return texture;
-	}
-
-	private Texture2D GenerateGradientTexture(int width, int height, int scale)
-	{
-		Texture2D texture = new Texture2D(width, height, TextureFormat.RGBA32, true);
-		Vector2 center = new Vector2(width * 0.5f, height * 0.5f);
-
-		for (int x = 0; x < width; x++)
-		{
-			for (int y = 0; y < height; y++)
-			{
-				float distFromCenter = Vector2.Distance(center, new Vector2(x, y));
-				float pixel = (0.3f / (distFromCenter / width));
-				texture.SetPixel(x, y, new Color(pixel, pixel, pixel));
-			}
-		}
-
-		texture.Apply();
-		return texture;
-	}
-
-	private Color CalculatePerlinNoise(int x, int y, int width, int height, int scale)
-	{
-		float xcoord = (float)x / width * scale;
-		float ycoord = (float)y / height * scale;
-
-		float colorSample = Mathf.PerlinNoise(xcoord + Random.Range(0, 1000), ycoord + Random.Range(0, 1000));
-		return new Color(colorSample, colorSample, colorSample);
-	}
+	#endregion
 }
+
+public enum TileType
+{
+	Grass = 0,
+	Water,
+	Mountain,
+	City
+};
 
 [System.Serializable]
 public class BiomesWrapper
 {
+	public TileType tileType;
 	public List<GameObject> tiles;
 }

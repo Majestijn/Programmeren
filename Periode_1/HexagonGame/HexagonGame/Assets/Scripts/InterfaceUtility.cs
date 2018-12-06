@@ -26,4 +26,5 @@ public interface IMovable
 public interface IAttackable
 {
 	void SetTarget(Health enemyHealth);
+	void Attack();
 }

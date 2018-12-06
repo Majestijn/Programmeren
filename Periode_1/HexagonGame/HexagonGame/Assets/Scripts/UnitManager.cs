@@ -2,19 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[DefaultExecutionOrder(20)]
+[DefaultExecutionOrder(3)]
 public class UnitManager : MonoBehaviour {
 
 	public delegate void UnitDiesAction(Unit unit);
 
 	public event UnitDiesAction OnUnitDeath;
-
-	[SerializeField] private GameObject m_TestUnit;
-	[SerializeField] private GameObject m_TestUnit1;
 	
 	public static UnitManager instance;
 
-	private List<Unit> m_UnitList;
+	private List<Unit> m_AllyList;
+	private List<Unit> m_EnemyList;
 
 	private void Awake()
 	{
@@ -25,29 +23,103 @@ public class UnitManager : MonoBehaviour {
 
 		GameManager.instance.OnEndTurn += ResetAllUnits;
 
-		m_UnitList = new List<Unit>();
-
-		for (int i = 0; i < 5; i++)
-		{
-			Vector2Int poss = new Vector2Int(i, i);
-			GameObject goo = Instantiate(m_TestUnit1, GridManager.instance.GetHexFromPosition(poss).transform.position, Quaternion.identity);
-			goo.GetComponent<Unit>().m_CurrentHex = GridManager.instance.GetHexFromPosition(poss);
-			goo.GetComponent<Unit>().m_CurrentHex.m_IsAvailable = false;
-			GridManager.instance.GetHexFromPosition(poss).m_CurrentUnit = goo.GetComponent<Unit>();
-			m_UnitList.Add(goo.GetComponent<Unit>());
-		}
-
-		Vector2Int pos = new Vector2Int(10, 10);
-		GameObject go = Instantiate(m_TestUnit, GridManager.instance.GetHexFromPosition(pos).transform.position, Quaternion.identity);
-		go.GetComponent<Unit>().m_CurrentHex = GridManager.instance.GetHexFromPosition(pos);
-		go.GetComponent<Unit>().m_CurrentHex.m_IsAvailable = false;
-		GridManager.instance.GetHexFromPosition(pos).m_CurrentUnit = go.GetComponent<Unit>();
-		m_UnitList.Add(go.GetComponent<Unit>());
+		m_AllyList = new List<Unit>();
+		m_EnemyList = new List<Unit>();
 	}
 
 	private void OnDestroy()
 	{
 		GameManager.instance.OnEndTurn -= ResetAllUnits;
+	}
+
+	#region Instantiate Unit Functions
+	public void InstantiateUnit(Vector2Int fromWhere, AllyType type)
+	{
+		Hex hex = GridManager.instance.GetFirstAvailableSlotFromNeighbours(fromWhere);
+
+		if (hex != null)
+		{
+			Vector3 tempPos = hex.transform.position;
+
+			GameObject go = Instantiate(UnitLibrary.instance.GetAllyData(type), tempPos, Quaternion.identity);
+			Unit unit = go.GetComponent<Unit>();
+
+			unit.m_CurrentHex = hex;
+			unit.m_CurrentHex.m_IsAvailable = false;
+
+			hex.m_CurrentUnit = unit;
+
+			m_AllyList.Add(unit);
+		}
+		else
+		{
+			UIManager.instance.ToggleMoreSpaceObject();
+		}
+
+	}
+	public void InstantiateUnitAtPosition(Vector2Int where, AllyType type)
+	{
+		Hex hex = GridManager.instance.m_HexDict[where];
+		Vector3 tempPos = hex.transform.position;
+
+		GameObject go = Instantiate(UnitLibrary.instance.GetAllyData(type), tempPos, Quaternion.identity);
+		Unit unit = go.GetComponent<Unit>();
+
+		unit.m_CurrentHex = hex;
+		unit.m_CurrentHex.m_IsAvailable = false;
+
+		hex.m_CurrentUnit = unit;
+
+		m_AllyList.Add(unit);
+	}
+	public void InstantiateUnit(Vector2Int fromWhere, EnemyType type)
+	{
+		Hex hex = GridManager.instance.GetFirstAvailableSlotFromNeighbours(fromWhere);
+		Vector3 tempPos = hex.transform.position;
+
+		GameObject go = Instantiate(UnitLibrary.instance.GetEnemyData(type), tempPos, Quaternion.identity);
+		Unit unit = go.GetComponent<Unit>();
+
+		unit.m_CurrentHex = hex;
+		unit.m_CurrentHex.m_IsAvailable = false;
+
+		hex.m_CurrentUnit = unit;
+
+		if (unit.unitData.alligiance == Allegiance.Ally)
+			m_AllyList.Add(unit);
+		else
+			m_EnemyList.Add(unit);
+	}
+	public void InstantiateUnitAtPosition(Vector2Int where, EnemyType type)
+	{
+		Hex hex = GridManager.instance.m_HexDict[where];
+		Vector3 tempPos = hex.transform.position;
+
+		GameObject go = Instantiate(UnitLibrary.instance.GetEnemyData(type), tempPos, Quaternion.identity);
+		Unit unit = go.GetComponent<Unit>();
+
+		unit.m_CurrentHex = hex;
+		unit.m_CurrentHex.m_IsAvailable = false;
+
+		hex.m_CurrentUnit = unit;
+
+		m_AllyList.Add(unit);
+	}
+	#endregion
+
+	public void BuyWarrior()
+	{
+		InstantiateUnit(SelectionManager.instance.m_CurrentlySelectedCity.m_Hex.m_GridPosition, AllyType.WarriorCommon);
+	}
+
+	public void BuyArcher()
+	{
+		InstantiateUnit(SelectionManager.instance.m_CurrentlySelectedCity.m_Hex.m_GridPosition, AllyType.ArcherCommon);
+	}
+
+	public void BuyMage()
+	{
+		InstantiateUnit(SelectionManager.instance.m_CurrentlySelectedCity.m_Hex.m_GridPosition, AllyType.MageCommon);
 	}
 
 	public void FireUnitDiesAction(Unit unit)
@@ -65,14 +137,18 @@ public class UnitManager : MonoBehaviour {
 	IEnumerator RDeleteUnit(Unit unit)
 	{
 		yield return new WaitForSeconds(4);
-		unit.m_CurrentHex.m_CurrentUnit = null;
-		unit.m_CurrentHex.m_IsAvailable = true;
+		unit.m_CurrentHex.ResetValues();
 		GameObject.Destroy(unit.gameObject);
 	}
 
 	public void ResetAllUnits()
 	{
-		foreach (Unit unit in m_UnitList)
+		foreach (Unit unit in m_AllyList)
+		{
+			unit.m_MoveAmount = unit.unitData.moveAmount;
+		}
+
+		foreach (Unit unit in m_EnemyList)
 		{
 			unit.m_MoveAmount = unit.unitData.moveAmount;
 		}

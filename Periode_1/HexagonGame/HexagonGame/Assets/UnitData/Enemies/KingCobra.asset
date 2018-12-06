@@ -13,6 +13,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Health: 10
   m_AttackDamage: 10
+  m_Movespeed: 0
   m_MoveAmount: 3
   m_Prefab: {fileID: 1769531241913058, guid: b4415dea66b940743ba70774ec0aa485, type: 2}
   m_Allegiance: 1
+  m_UnitName: Cobra
+  m_UnitImage: {fileID: 0}

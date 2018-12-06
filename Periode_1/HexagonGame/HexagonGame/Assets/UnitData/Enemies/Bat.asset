@@ -9,10 +9,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9488f1260e3e234298893a7f248f83f, type: 3}
-  m_Name: GiantBee
+  m_Name: Bat
   m_EditorClassIdentifier: 
   m_Health: 10
   m_AttackDamage: 10
+  m_Movespeed: 0
   m_MoveAmount: 3
-  m_Prefab: {fileID: 1244098249356686, guid: 0ddbbebdbf49eb143b016ad8abc7337f, type: 2}
+  m_Prefab: {fileID: 1105588004266822, guid: 5980e2681e3195442b71e5ce6198317a, type: 2}
   m_Allegiance: 1
+  m_UnitName: Bat
+  m_UnitImage: {fileID: 0}

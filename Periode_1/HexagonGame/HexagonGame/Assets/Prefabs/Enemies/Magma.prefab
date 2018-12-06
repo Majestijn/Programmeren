@@ -204,6 +204,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4532943157435226}
   - component: {fileID: 95833941557782184}
+  - component: {fileID: 114277473766575964}
+  - component: {fileID: 114154964362143542}
   m_Layer: 0
   m_Name: Magma
   m_TagString: Untagged
@@ -906,6 +908,34 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114154964362143542
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1407424403651710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 404bf1e4db6c5fa459a815389b4298fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsDead: 0
+--- !u!114 &114277473766575964
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1407424403651710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4c60e0647d8c24585a2dc215e3cf66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Data: {fileID: 11400000, guid: 6093b4372148b154ea342a4ccb5785af, type: 2}
+  m_MoveAmount: 0
+  m_AllMovementPossibilities: []
+  m_CurrentHex: {fileID: 0}
+  m_Animator: {fileID: 0}
 --- !u!137 &137531119837444878
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

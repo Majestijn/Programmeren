@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[DefaultExecutionOrder(1)]
 public class GameManager : MonoBehaviour {
 
 	public delegate void EndTurnAction();
@@ -18,5 +19,6 @@ public class GameManager : MonoBehaviour {
 	public void EndTurn()
 	{
 		OnEndTurn?.Invoke();
+		SelectionManager.instance.SelectUnit();
 	}
 }

@@ -395,6 +395,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4473385060947656}
   - component: {fileID: 95388273465433476}
+  - component: {fileID: 114127897354115680}
+  - component: {fileID: 114721665617123718}
   m_Layer: 0
   m_Name: GiantBee
   m_TagString: Untagged
@@ -2279,7 +2281,7 @@ Transform:
   m_GameObject: {fileID: 1244098249356686}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.37, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2.3, y: 2.3, z: 2.3}
   m_Children:
   - {fileID: 4532383126265900}
   - {fileID: 4067354643402704}
@@ -3162,6 +3164,34 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114127897354115680
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1244098249356686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4c60e0647d8c24585a2dc215e3cf66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Data: {fileID: 11400000, guid: 00e7a96741590bc40af0cb9ff42f4888, type: 2}
+  m_MoveAmount: 0
+  m_AllMovementPossibilities: []
+  m_CurrentHex: {fileID: 0}
+  m_Animator: {fileID: 0}
+--- !u!114 &114721665617123718
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1244098249356686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 404bf1e4db6c5fa459a815389b4298fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsDead: 0
 --- !u!137 &137290140659364640
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

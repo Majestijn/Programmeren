@@ -711,6 +711,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4085873289109364}
   - component: {fileID: 95184006077968940}
+  - component: {fileID: 114889498874124816}
+  - component: {fileID: 114303883475802810}
   m_Layer: 0
   m_Name: Wolf
   m_TagString: Untagged
@@ -843,7 +845,7 @@ Transform:
   m_GameObject: {fileID: 1874943337216290}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.16, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 4186538132564414}
   - {fileID: 4459105875880850}
@@ -1569,6 +1571,34 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114303883475802810
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1874943337216290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 404bf1e4db6c5fa459a815389b4298fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsDead: 0
+--- !u!114 &114889498874124816
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1874943337216290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4c60e0647d8c24585a2dc215e3cf66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Data: {fileID: 11400000, guid: d75787cd0323ada4b9f7671a71a07381, type: 2}
+  m_MoveAmount: 0
+  m_AllMovementPossibilities: []
+  m_CurrentHex: {fileID: 0}
+  m_Animator: {fileID: 0}
 --- !u!137 &137904022730525066
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

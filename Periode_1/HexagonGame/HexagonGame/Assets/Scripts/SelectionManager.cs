@@ -2,22 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-[DefaultExecutionOrder(10)]
+[DefaultExecutionOrder(0)]
 public class SelectionManager : MonoBehaviour {
 
 	public delegate void UnitSelectionAction(Unit unit);
 	public delegate void UnitDeselectionAction();
 
+	public delegate void CitySelectionAction(City city);
+	public delegate void CityDeselectionAction();
+
 	public event UnitSelectionAction OnUnitSelected;
 	public event UnitDeselectionAction OnUnitDeselected;
+
+	public event CitySelectionAction OnCitySelected;
+	public event CityDeselectionAction OnCityDeselected;
 
 	#region variables
 	public static SelectionManager instance;
 
 	public GameObject m_SelectionOutline;
 
-	private Unit m_CurrentlySelected;
+	public Unit m_CurrentlySelected;
+	public City m_CurrentlySelectedCity;
 
 	private List<Hex> m_AllMovementPossibilities;
 
@@ -46,18 +54,26 @@ public class SelectionManager : MonoBehaviour {
 			{
 				Hex hex = hit.transform.gameObject.GetComponent<Hex>();
 				Unit unit = hex.m_CurrentUnit;
+				City city = hex.GetComponent<City>();
 
 				if (hex != null)
 				{
 					if (unit != null && m_CanSelect && !unit.CheckIfDead())
 					{
 						SelectUnit(hex, unit);
+
+						if (city != null)
+							SelectCity(city);
+					}
+					else if (city != null && m_CanSelect)
+					{
+						SelectCity(city);
+						DeSelectUnit();
 					}
 					else
 					{
-						OnUnitDeselected?.Invoke();
-						RemoveMovementPossibilities();
-						m_CurrentlySelected = null;
+						DeselectCity();
+						DeSelectUnit();
 					}
 				}
 				else
@@ -83,7 +99,7 @@ public class SelectionManager : MonoBehaviour {
 
 					if (hex != null && m_CurrentlySelected != null && m_CurrentlySelected.m_MoveAmount > 0 && m_CurrentlySelected.m_CurrentHex != hex && m_AllMovementPossibilities.Contains(hex))
 					{
-						if (hex.m_CurrentUnit != null)
+						if (hex.m_CurrentUnit != null && hex.m_CurrentUnit.unitData.alligiance != m_CurrentlySelected.unitData.alligiance)
 						{
 							m_CanSelect = false;
 							m_CurrentlySelected.MoveToEnemy(hex);
@@ -115,12 +131,39 @@ public class SelectionManager : MonoBehaviour {
 		GridManager.instance.ChangeHexMaterial(m_AllMovementPossibilities, MaterialManager.instance.GetMaterial(MaterialName.SelectedMaterial));
 	}
 
-	private void RemoveMovementPossibilities()
+	public void SelectUnit()
 	{
+		if (m_CurrentlySelected != null)
+		{
+			m_CanSelect = true;
+			DisplayMovementPossibilities(m_CurrentlySelected.m_CurrentHex, m_CurrentlySelected.m_MoveAmount);
+			OnUnitSelected?.Invoke(m_CurrentlySelected);
+			m_CurrentlySelected.m_AllMovementPossibilities = m_AllMovementPossibilities;
+		}
+	}
+
+	public void SelectCity(City city)
+	{
+		OnCitySelected?.Invoke(city);
+		m_CurrentlySelectedCity = city;
+	}
+
+	public void DeselectCity()
+	{
+		OnCityDeselected?.Invoke();
+		m_CurrentlySelectedCity = null;
+	}
+
+	public void DeSelectUnit()
+	{
+		OnUnitDeselected?.Invoke();
+
 		if (m_AllMovementPossibilities != null)
 		{
 			GridManager.instance.ChangeHexMaterial(m_AllMovementPossibilities, MaterialManager.instance.GetMaterial(MaterialName.BaseMaterial));
 		}
+
+		m_CurrentlySelected = null;
 	}
 
 	public void SelectUnit(Hex hex, Unit unit)
