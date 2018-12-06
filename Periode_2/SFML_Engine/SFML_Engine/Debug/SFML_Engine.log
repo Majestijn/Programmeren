@@ -1,0 +1,5 @@
+﻿  CustomTime.cpp
+  Input.cpp
+  Generating Code...
+CustomTime.obj : error LNK2001: unresolved external symbol "public: static float CoreModule::CustomTime::deltaTime" (?deltaTime@CustomTime@CoreModule@@2MA)
+D:\School\Jaar 3\Programmeren\Periode_2\SFML_Engine\Debug\SFML_Engine.exe : fatal error LNK1120: 1 unresolved externals
