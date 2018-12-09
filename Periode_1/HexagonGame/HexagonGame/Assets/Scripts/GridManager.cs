@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[DefaultExecutionOrder(4)]
 public class GridManager : MonoBehaviour {
 
 	#region variables
@@ -316,14 +317,12 @@ public class GridManager : MonoBehaviour {
 		CityNamer.instance.ChangeCity(m_HexDict[tempPos].GetComponent<City>());
 	}
 
-	public void BuildCity(Vector2Int pos)
+	public void BuildCity(Vector2Int pos, Allegiance allegience)
 	{
 		ReplaceHex(pos, TileType.City);
-		UnitManager.instance.DeleteUnit(SelectionManager.instance.m_CurrentlySelected);
-		SelectionManager.instance.DeSelectUnit();
 
-		CityNamer.instance.SetInputObject(true);
-		CityNamer.instance.ChangeCity(m_HexDict[pos].GetComponent<City>());
+		City currentCity = m_HexDict[pos].GetComponent<City>();
+		currentCity.SetCityAllegience(allegience);
 	}
 
 	public void ChangeHexMaterial(Hex hex, Material material)

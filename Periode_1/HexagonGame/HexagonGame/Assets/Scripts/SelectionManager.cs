@@ -58,14 +58,14 @@ public class SelectionManager : MonoBehaviour {
 
 				if (hex != null)
 				{
-					if (unit != null && m_CanSelect && !unit.CheckIfDead())
+					if (unit != null && m_CanSelect && !unit.CheckIfDead() && unit.unitData.alligiance == Allegiance.Ally)
 					{
 						SelectUnit(hex, unit);
 
 						if (city != null)
 							SelectCity(city);
 					}
-					else if (city != null && m_CanSelect)
+					else if (city != null && m_CanSelect && city.GetCityAllegience() == Allegiance.Ally)
 					{
 						SelectCity(city);
 						DeSelectUnit();
@@ -131,12 +131,35 @@ public class SelectionManager : MonoBehaviour {
 		GridManager.instance.ChangeHexMaterial(m_AllMovementPossibilities, MaterialManager.instance.GetMaterial(MaterialName.SelectedMaterial));
 	}
 
+	private void DisplayMovementPossibilities(Hex startPos, Hex targetPos)
+	{
+		if (m_AllMovementPossibilities != null)
+		{
+			GridManager.instance.ChangeHexMaterial(m_AllMovementPossibilities, MaterialManager.instance.GetMaterial(MaterialName.BaseMaterial));
+		}
+
+		GridManager.instance.ResetAllHexes();
+		m_AllMovementPossibilities = Pathfinding.instance.FindPath(startPos.m_GridPosition, targetPos.m_GridPosition);
+		GridManager.instance.ChangeHexMaterial(m_AllMovementPossibilities, MaterialManager.instance.GetMaterial(MaterialName.SelectedMaterial));
+	}
+
 	public void SelectUnit()
 	{
 		if (m_CurrentlySelected != null)
 		{
 			m_CanSelect = true;
 			DisplayMovementPossibilities(m_CurrentlySelected.m_CurrentHex, m_CurrentlySelected.m_MoveAmount);
+			OnUnitSelected?.Invoke(m_CurrentlySelected);
+			m_CurrentlySelected.m_AllMovementPossibilities = m_AllMovementPossibilities;
+		}
+	}
+
+	public void SelectUnit(Hex target)
+	{
+		if (m_CurrentlySelected != null)
+		{
+			m_CanSelect = true;
+			DisplayMovementPossibilities(m_CurrentlySelected.m_CurrentHex, target);
 			OnUnitSelected?.Invoke(m_CurrentlySelected);
 			m_CurrentlySelected.m_AllMovementPossibilities = m_AllMovementPossibilities;
 		}

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[DefaultExecutionOrder(4)]
+[DefaultExecutionOrder(5)]
 public class Bootstrap : MonoBehaviour {
 
 	void Start () {
@@ -21,10 +21,8 @@ public class Bootstrap : MonoBehaviour {
 			enemyCityPos = GridManager.instance.FindRandomHex().m_GridPosition;
 		}
 
-		GridManager.instance.BuildCity(enemyCityPos);
-	}
-	
-	void Update () {
-		
+		GridManager.instance.BuildCity(enemyCityPos, Allegiance.Enemy);
+		UnitManager.instance.InstantiateUnitAtPosition(GridManager.instance.GetFirstAvailableSlotFromNeighbours(enemyCityPos).m_GridPosition, EnemyType.Spider);
+
 	}
 }

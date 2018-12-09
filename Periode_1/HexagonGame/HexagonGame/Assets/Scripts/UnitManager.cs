@@ -11,8 +11,8 @@ public class UnitManager : MonoBehaviour {
 	
 	public static UnitManager instance;
 
-	private List<Unit> m_AllyList;
-	private List<Unit> m_EnemyList;
+	public List<Unit> m_AllyList;
+	public List<Unit> m_EnemyList;
 
 	private void Awake()
 	{
@@ -103,7 +103,7 @@ public class UnitManager : MonoBehaviour {
 
 		hex.m_CurrentUnit = unit;
 
-		m_AllyList.Add(unit);
+		m_EnemyList.Add(unit);
 	}
 	#endregion
 
