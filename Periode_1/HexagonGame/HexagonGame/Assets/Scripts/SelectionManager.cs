@@ -5,7 +5,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [DefaultExecutionOrder(0)]
-public class SelectionManager : MonoBehaviour {
+public class SelectionManager : MonoBehaviour
+{
 
 	public delegate void UnitSelectionAction(Unit unit);
 	public delegate void UnitDeselectionAction();

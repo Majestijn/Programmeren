@@ -112,7 +112,11 @@ public class Unit : MonoBehaviour, IMovable, IAttackable {
 
 		GridManager.instance.ChangeHexMaterial(m_CurrentHex, MaterialManager.instance.GetMaterial(MaterialName.BaseMaterial));
 
-		SelectionManager.instance.SelectUnit(m_CurrentHex, this);
+		if (unitData.alligiance == Allegiance.Ally)
+			SelectionManager.instance.SelectUnit(m_CurrentHex, this);
+
+		GridManager.instance.m_CanMove = true;
+		GridManager.instance.ResetAllHexes();
 
 		yield return null;
 	}

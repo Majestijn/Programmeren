@@ -16,12 +16,14 @@ public class Bootstrap : MonoBehaviour {
 		//Spawn an enemy city
 		Vector2Int enemyCityPos = GridManager.instance.FindRandomHex().m_GridPosition;
 
-		while (GridManager.instance.GetDistance(randomPos, enemyCityPos) < 30)
+		while (GridManager.instance.GetDistance(randomPos, enemyCityPos) < 20)
 		{
 			enemyCityPos = GridManager.instance.FindRandomHex().m_GridPosition;
 		}
 
 		GridManager.instance.BuildCity(enemyCityPos, Allegiance.Enemy);
+		UnitManager.instance.InstantiateUnitAtPosition(GridManager.instance.GetFirstAvailableSlotFromNeighbours(enemyCityPos).m_GridPosition, EnemyType.Spider);
+		UnitManager.instance.InstantiateUnitAtPosition(GridManager.instance.GetFirstAvailableSlotFromNeighbours(enemyCityPos).m_GridPosition, EnemyType.Spider);
 		UnitManager.instance.InstantiateUnitAtPosition(GridManager.instance.GetFirstAvailableSlotFromNeighbours(enemyCityPos).m_GridPosition, EnemyType.Spider);
 
 	}

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [DefaultExecutionOrder(20)]
-public class Pathfinding : MonoBehaviour {
+public class Pathfinding : MonoBehaviour
+{
 
 	public static Pathfinding instance;
 
@@ -33,20 +34,20 @@ public class Pathfinding : MonoBehaviour {
 
 			foreach (Hex neighbour in currentNodeNeighbours)
 			{
-					if (currentNode.gCost + 1 < neighbour.gCost)
-					{ 
-						neighbour.gCost = currentNode.gCost + 1;
-						neighbour.hCost = GridManager.instance.GetDistance(currentNode, targetNode);
+				if (currentNode.gCost + 1 < neighbour.gCost)
+				{
+					neighbour.gCost = currentNode.gCost + 1;
+					neighbour.hCost = GridManager.instance.GetDistance(currentNode, targetNode);
 
-						neighbour.m_Parent = currentNode;
+					neighbour.m_Parent = currentNode;
 
-						if (neighbour == targetNode)
-						{
-							return RetracePath(startNode, targetNode);
-						}
-
-						openList.Add(neighbour);
+					if (neighbour == targetNode)
+					{
+						return RetracePath(startNode, targetNode);
 					}
+
+					openList.Add(neighbour);
+				}
 			}
 		}
 		while (openList.Count > 0);
@@ -63,11 +64,11 @@ public class Pathfinding : MonoBehaviour {
 		startNode.m_Parent = null;
 		openList.Enqueue(startNode);
 
-		while(openList.Count > 0)
+		while (openList.Count > 0)
 		{
 			List<Hex> neighbours = GridManager.instance.GetNeighbours(openList.Peek());
 
-			foreach(Hex neighbour in neighbours)
+			foreach (Hex neighbour in neighbours)
 			{
 				if (openList.Peek().gCost + 1 < neighbour.gCost && openList.Peek().gCost <= moveAmount)
 				{
@@ -83,7 +84,7 @@ public class Pathfinding : MonoBehaviour {
 
 		List<Hex> moveOptions = new List<Hex>();
 
-		foreach(KeyValuePair<Vector2Int, Hex> keyValuePair in GridManager.instance.m_HexDict)
+		foreach (KeyValuePair<Vector2Int, Hex> keyValuePair in GridManager.instance.m_HexDict)
 		{
 			if (keyValuePair.Value.gCost <= moveAmount)
 			{

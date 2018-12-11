@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [DefaultExecutionOrder(1)]
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
 
 	public delegate void EndTurnAction();
 

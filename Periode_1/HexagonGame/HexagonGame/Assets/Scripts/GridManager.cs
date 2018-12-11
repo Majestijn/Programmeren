@@ -15,6 +15,8 @@ public class GridManager : MonoBehaviour {
 
 	[SerializeField] private int m_GridSize;
 
+	public bool m_CanMove;
+
 	public Dictionary<Vector2Int, Hex> m_HexDict;
 
 	public static readonly Vector2Int[][] m_AxialDirections = new Vector2Int[][]

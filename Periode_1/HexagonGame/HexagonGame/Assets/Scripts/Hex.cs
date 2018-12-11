@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class Hex : MonoBehaviour {
+public class Hex : MonoBehaviour
+{
 
 	#region variables
 
@@ -23,7 +24,6 @@ public class Hex : MonoBehaviour {
 	[HideInInspector]
 	public MeshRenderer m_MeshRenderer;
 
-	[HideInInspector]
 	public bool m_IsAvailable = true;
 	[HideInInspector]
 	public Hex m_Parent;
@@ -35,8 +35,8 @@ public class Hex : MonoBehaviour {
 	#region Getters
 	public int gCost
 	{
-		get { return m_GCost;}
-		set { m_GCost = value;}
+		get { return m_GCost; }
+		set { m_GCost = value; }
 	}
 	public int hCost
 	{
@@ -46,7 +46,7 @@ public class Hex : MonoBehaviour {
 
 	public int fCost
 	{
-		get { return m_GCost + m_HCost;}
+		get { return m_GCost + m_HCost; }
 	}
 	#endregion
 	#endregion
@@ -72,7 +72,8 @@ public class Hex : MonoBehaviour {
 		height = mesh.mesh.bounds.size.x;
 	}
 
-	void Start () {
+	void Start()
+	{
 		//Generate3DMesh();
 		//Generate2DMesh();
 	}
