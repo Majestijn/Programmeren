@@ -23,8 +23,8 @@ public class Bootstrap : MonoBehaviour {
 
 		GridManager.instance.BuildCity(enemyCityPos, Allegiance.Enemy);
 		UnitManager.instance.InstantiateUnitAtPosition(GridManager.instance.GetFirstAvailableSlotFromNeighbours(enemyCityPos).m_GridPosition, EnemyType.Spider);
-		UnitManager.instance.InstantiateUnitAtPosition(GridManager.instance.GetFirstAvailableSlotFromNeighbours(enemyCityPos).m_GridPosition, EnemyType.Spider);
-		UnitManager.instance.InstantiateUnitAtPosition(GridManager.instance.GetFirstAvailableSlotFromNeighbours(enemyCityPos).m_GridPosition, EnemyType.Spider);
+		//UnitManager.instance.InstantiateUnitAtPosition(GridManager.instance.GetFirstAvailableSlotFromNeighbours(enemyCityPos).m_GridPosition, EnemyType.Spider);
+		//UnitManager.instance.InstantiateUnitAtPosition(GridManager.instance.GetFirstAvailableSlotFromNeighbours(enemyCityPos).m_GridPosition, EnemyType.Spider);
 
 	}
 }

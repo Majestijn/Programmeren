@@ -73,11 +73,14 @@ public class AIManager : MonoBehaviour
 
 			List<Hex> hexList = Pathfinding.instance.FindPath(enemy.m_CurrentHex.m_GridPosition, target.m_GridPosition);
 
+			print(enemy.unitData.moveAmount);
+
 			for (int x = 0; x < hexList.Count; x++)
 			{
-				if (GridManager.instance.GetDistance(enemy.m_CurrentHex, hexList[x]) == enemy.m_MoveAmount)
+				if (GridManager.instance.GetDistance(enemy.m_CurrentHex, hexList[x]) == enemy.unitData.moveAmount)
 				{
 					target = hexList[x];
+					break;
 				}
 			}
 
@@ -88,6 +91,7 @@ public class AIManager : MonoBehaviour
 				yield return null;
 			}
 		}
+		UnitManager.instance.ResetAllUnits();
 		yield return null;
 	}
 }

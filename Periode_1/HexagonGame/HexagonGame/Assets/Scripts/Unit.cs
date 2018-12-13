@@ -64,8 +64,6 @@ public class Unit : MonoBehaviour, IMovable, IAttackable {
 	private IEnumerator RMoveToHex(Hex targetHex)
 	{
 		m_Animator.SetBool("IsWalking", true);
-		m_CurrentHex.m_CurrentUnit = null;
-		m_CurrentHex.m_IsAvailable = true;
 
 		GridManager.instance.ChangeHexMaterial(m_AllMovementPossibilities, MaterialManager.instance.GetMaterial(MaterialName.BaseMaterial));
 
@@ -104,6 +102,9 @@ public class Unit : MonoBehaviour, IMovable, IAttackable {
 
 		m_MoveAmount -= m_PathList.Count;
 
+
+		m_CurrentHex.m_CurrentUnit = null;
+		m_CurrentHex.m_IsAvailable = true;
 		m_CurrentHex = m_PathList[m_PathList.Count - 1];
 		m_CurrentHex.m_IsAvailable = false;
 		m_CurrentHex.m_CurrentUnit = this;
